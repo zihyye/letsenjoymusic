@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSIC IS MY LIFE - 함께 즐기는 음악</title>
-    <link rel="stylesheet" href="style.css">
+    <?!= include('style'); ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -18,10 +17,10 @@
 
         <main>
             <hr>
-            
+
             <h2>답변해주세요🎶</h2>
             <form id="music-form">
-                 <div class="form-group">
+                <div class="form-group">
                     <label>생활속에서 얼마나 자주 노래를 듣는지?</label>
                     <div class="radio-group">
                         <input type="radio" id="freq4" name="frequency" value="4매우자주들음" required><label for="freq4">매우 자주 들음</label>
@@ -64,4 +63,35 @@
                     <textarea id="rec_song_reason" name="rec_song_reason" rows="2" placeholder="이유" style="margin-top: 8px; height: 60px;"></textarea>
                 </div>
 
-                <button type="submit" id="submit-btn">제출하고 결과보기
+                <button type="submit" id="submit-btn">제출하고 결과보기</button>
+            </form>
+
+            <section class="stats-section">
+                <h2>📈 응답 통계</h2>
+                <div class="chart-container">
+                    <div>
+                        <h3>노래 청취 빈도</h3>
+                        <canvas id="frequency-chart"></canvas>
+                    </div>
+                    <div>
+                        <h3>선호 장르</h3>
+                        <canvas id="genre-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section class="records-section">
+                <h2>💬 다른 사람들의 추천과 생각</h2>
+                <div class="records-list" id="records-container">
+                    <p class="loading-message">데이터를 불러오는 중입니다...</p>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 MUSIC IS MY LIFE</p>
+        </footer>
+    </div>
+    <?!= include('script'); ?>
+</body>
+</html>
