@@ -1,5 +1,5 @@
 // ❗️❗️❗️ 1단계에서 복사한 Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "여기에 1단계에서 복사한 웹 앱 URL을 붙여넣으세요";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec";
 
 let frequencyChart, genreChart;
 
