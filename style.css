@@ -1,0 +1,163 @@
+<style>
+/* Google Fonts에서 'Noto Sans KR' 폰트를 불러옵니다. */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* 전체 스타일 변수 */
+:root {
+    --gradient-start: #65b2e3; /* 배경 그라데이션 시작 색 */
+    --gradient-end: #e2e8f0;   /* 배경 그라데이션 끝 색 (실버) */
+    
+    --button-bg: #3b82f6;
+    --button-hover-bg: #2563eb;
+    
+    /* ★★★ 수정한 부분: 텍스트 박스 배경색을 연한 회색으로 변경 ★★★ */
+    --textbox-bg: #f8f9fa; /* 연한 회색 배경 */
+    --textbox-border: #e9ecef; /* 연한 회색 테두리 */
+    
+    --text-color: #1f2937;
+    --subtle-text: #6b7280;
+    --card-bg: rgba(255, 255, 255, 0.9); /* 흰색에 가깝게 조정하여 가독성 확보 */
+    --font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 1. 기본 페이지 스타일 */
+body {
+    font-family: var(--font-family);
+    background-color: var(--gradient-start);
+    background-image: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    color: var(--text-color);
+    line-height: 1.7;
+    margin: 0;
+    padding: 20px;
+    background-attachment: fixed;
+}
+
+/* 2. 콘텐츠 컨테이너 스타일 */
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+/* 3. 헤더 및 섹션 제목 스타일 */
+header h1 {
+    color: var(--text-color);
+    text-align: center;
+    font-weight: 700;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 30px 0;
+}
+
+/* 4. 폼(설문) 요소 스타일 */
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: var(--text-color);
+}
+
+/* ★★★ 수정한 부분: 텍스트 박스 스타일 변경 ★★★ */
+input[type="text"], textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--textbox-bg); /* 연한 회색 배경 적용 */
+    border: 1px solid var(--textbox-border); /* 연한 회색 테두리 적용 */
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    color: var(--text-color);
+}
+
+input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: var(--button-bg); /* 포커스 시 버튼 색과 동일하게 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+textarea {
+    resize: vertical;
+    height: 80px;
+}
+.radio-group label, .checkbox-group label {
+    color: var(--subtle-text);
+    transition: color 0.2s;
+}
+input[type="radio"]:checked + label,
+input[type="checkbox"]:checked + label {
+    color: var(--button-bg);
+    font-weight: 500;
+}
+
+/* 버튼 스타일 */
+button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background: var(--button-bg);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 700;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: var(--button-hover-bg);
+    transform: translateY(-2px);
+}
+button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* 5. 결과 및 통계 섹션 스타일 */
+.stats-section, .records-section {
+    margin-top: 40px;
+}
+h2 {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 10px;
+}
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+.records-list .record-item {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+.records-list .record-item strong {
+    color: var(--button-bg);
+    font-weight: 500;
+}
+.records-list .record-item em {
+    color: var(--subtle-text);
+}
+.loading-message {
+    text-align: center;
+    color: var(--subtle-text);
+    padding: 20px;
+}
+
+/* 6. 반응형 디자인 (모바일 화면) */
+@media (max-width: 600px) {
+    .chart-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
