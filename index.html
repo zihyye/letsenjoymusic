@@ -18,7 +18,6 @@
 
         <main>
             <hr>
-
             <h2>답변해주세요🎶</h2>
             <form id="music-form">
                 <div class="form-group">
@@ -31,6 +30,7 @@
                         <input type="radio" id="freq0" name="frequency" value="0듣지않음"><label for="freq0">듣지 않음</label>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label>어떤 장르의 노래를 많이 듣는지? (복수선택가능)</label>
                     <div class="checkbox-group">
@@ -45,34 +45,33 @@
                     </div>
                     <input type="text" id="genre_other" name="genre_other" placeholder="기타 장르가 있다면 직접 작성해주세요.">
                 </div>
+                
                 <div class="form-group">
                     <label for="listen_reason">노래를 듣는 이유는?</label>
                     <textarea id="listen_reason" name="listen_reason" placeholder="예) 노래를 들으면 힘이나요."></textarea>
                 </div>
+                
                 <div class="form-group">
                     <label for="rec_artist">추천하고싶은 아티스트가 있다면?</label>
                     <input type="text" id="rec_artist" name="rec_artist" placeholder="아티스트">
                     <textarea id="rec_artist_reason" name="rec_artist_reason" rows="2" placeholder="이유" style="margin-top: 8px; height: 60px;"></textarea>
                 </div>
+
                 <div class="form-group">
                     <label for="rec_song">추천하고싶은 노래가 있다면?</label>
                     <input type="text" id="rec_song" name="rec_song" placeholder="아티스트/노래">
                     <textarea id="rec_song_reason" name="rec_song_reason" rows="2" placeholder="이유" style="margin-top: 8px; height: 60px;"></textarea>
                 </div>
-                <button type="submit" id="submit-btn">제출하고 결과보기</button>
-            </form>
+                
+                <button type="submit" id="submit-btn">답변 제출하기</button>
 
+            </form>
+            
             <section class="stats-section">
                 <h2>📈 응답 통계</h2>
                 <div class="chart-container">
-                    <div>
-                        <h3>노래 청취 빈도</h3>
-                        <canvas id="frequency-chart"></canvas>
-                    </div>
-                    <div>
-                        <h3>선호 장르</h3>
-                        <canvas id="genre-chart"></canvas>
-                    </div>
+                    <div><h3>노래 청취 빈도</h3><canvas id="frequency-chart"></canvas></div>
+                    <div><h3>선호 장르</h3><canvas id="genre-chart"></canvas></div>
                 </div>
             </section>
 
