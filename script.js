@@ -1,7 +1,21 @@
-// ❗️❗️❗️ 1단계에서 복사한 Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw059cxK2f7xdl3rcjlS5wwoFWpem2Q3v7TaXY7Wqd3LZcuiON1GZJI1XL1LFF_oE0_/exec"; // <== 본인 URL 확인!
+// ❗️❗️❗️ Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec"; // <== 본인 URL 확인!
 
 let frequencyChart, genreChart;
+
+// JSONP 요청을 위한 헬퍼 함수
+function jsonpRequest(url, callback) {
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        callback(data);
+    };
+
+    const script = document.createElement('script');
+    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+    document.body.appendChild(script);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeCharts();
@@ -22,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let genres = formData.getAll('genre');
         const otherGenre = formData.get('genre_other').trim();
         if (otherGenre) genres.push(`기타: ${otherGenre}`);
-        record.genres = genres;
+        record.genres = genres.join(', '); // ★ GET 요청을 위해 텍스트로 미리 변환
         
         record.listen_reason = formData.get('listen_reason').trim();
         record.rec_artist = formData.get('rec_artist').trim();
@@ -36,43 +50,33 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = '제출하고 결과보기';
             return;
         }
-
-        // fetch API를 사용해 POST 요청으로 데이터 전송
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify(record)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.result === 'success') {
+        
+        // ★★★ POST 방식에서 GET 방식으로 변경 ★★★
+        let queryString = "action=submit";
+        for (let key in record) {
+            queryString += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(record[key]);
+        }
+        
+        jsonpRequest(SCRIPT_URL + "?" + queryString, (data) => {
+            if (data.result === 'success') {
                 form.reset();
                 alert('소중한 의견이 등록되었습니다!');
                 loadInitialData(); // 제출 후 데이터 새로고침
             } else {
-                throw new Error('서버 응답 오류');
+                alert('오류가 발생했습니다: ' + (data.message || '서버 응답 오류'));
             }
-        })
-        .catch(error => {
-            alert('오류가 발생했습니다: ' + error.message);
-        })
-        .finally(() => {
+            
             submitBtn.disabled = false;
             submitBtn.textContent = '제출하고 결과보기';
         });
     });
 });
 
-// fetch API를 사용해 GET 요청으로 데이터 불러오기
+// ★★★ GET(JSONP) 방식으로 데이터 불러오기 ★★★
 function loadInitialData() {
-    fetch(SCRIPT_URL)
-        .then(response => response.json())
-        .then(records => {
-            updateUI(records);
-        })
-        .catch(error => {
-            console.error('데이터 로딩 실패:', error); // 콘솔에 오류 기록
-            document.querySelector('.loading-message').textContent = '데이터를 불러오는 데 실패했습니다.';
-        });
+    jsonpRequest(SCRIPT_URL, (records) => {
+        updateUI(records);
+    });
 }
 
 function updateUI(records) {
@@ -136,4 +140,6 @@ function renderTextRecords(records) {
         }
     });
 }
+
+
 
