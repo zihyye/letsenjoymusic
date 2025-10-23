@@ -1,5 +1,5 @@
 // ❗️❗️❗️ 1단계에서 복사한 Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec"; // <== 본인 URL 확인!
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw059cxK2f7xdl3rcjlS5wwoFWpem2Q3v7TaXY7Wqd3LZcuiON1GZJI1XL1LFF_oE0_/exec"; // <== 본인 URL 확인!
 
 let frequencyChart, genreChart;
 
