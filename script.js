@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
         const record = {};
-        
+
         record.frequency = formData.get('frequency');
         let genres = formData.getAll('genre');
         const otherGenre = formData.get('genre_other').trim();
         if (otherGenre) genres.push(`기타: ${otherGenre}`);
-        record.genres = genres.join(', '); // ★ GET 요청을 위해 텍스트로 미리 변환
-        
+        record.genres = genres.join(', '); // GET 요청을 위해 텍스트로 미리 변환
+
         record.listen_reason = formData.get('listen_reason').trim();
         record.rec_artist = formData.get('rec_artist').trim();
         record.rec_artist_reason = formData.get('rec_artist_reason').trim();
@@ -50,13 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = '제출하고 결과보기';
             return;
         }
-        
-        // ★★★ POST 방식에서 GET 방식으로 변경 ★★★
+
         let queryString = "action=submit";
         for (let key in record) {
             queryString += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(record[key]);
         }
-        
+
         jsonpRequest(SCRIPT_URL + "?" + queryString, (data) => {
             if (data.result === 'success') {
                 form.reset();
@@ -65,14 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 alert('오류가 발생했습니다: ' + (data.message || '서버 응답 오류'));
             }
-            
+
             submitBtn.disabled = false;
             submitBtn.textContent = '제출하고 결과보기';
         });
     });
 });
 
-// ★★★ GET(JSONP) 방식으로 데이터 불러오기 ★★★
+// GET(JSONP) 방식으로 데이터 불러오기
 function loadInitialData() {
     jsonpRequest(SCRIPT_URL, (records) => {
         updateUI(records);
