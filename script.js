@@ -1,5 +1,5 @@
-// ❗️❗️❗️ Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec";
+// ❗️❗️❗️ 1단계에서 복사한 Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec"; // <== 본인 URL 확인!
 
 let frequencyChart, genreChart;
 
@@ -70,6 +70,7 @@ function loadInitialData() {
             updateUI(records);
         })
         .catch(error => {
+            console.error('데이터 로딩 실패:', error); // 콘솔에 오류 기록
             document.querySelector('.loading-message').textContent = '데이터를 불러오는 데 실패했습니다.';
         });
 }
@@ -135,9 +136,4 @@ function renderTextRecords(records) {
         }
     });
 }
-            const recordDiv = document.createElement('div');
-            recordDiv.className = 'record-item';
-            recordDiv.innerHTML = content;
-            container.appendChild(recordDiv);
-        }
-    });
+
