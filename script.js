@@ -1,43 +1,7 @@
 // ❗️❗️❗️ Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwT7dRPxtcPJtx7redtaHlEymLy1mOKDXGnPr5oDYqbM9TqTs48PtowH9OXWrS_wtY8/exec"; // <== 본인 URL 확인!
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec";
 
 let frequencyChart, genreChart;
-
-// JSONP 요청을 위한 헬퍼 함수
-function jsonpRequest(url, callback, errorCallback) {
-    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    window[callbackName] = function(data) {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        callback(data);
-    };
-
-    const script = document.createElement('script');
-    // ★★★ 타임아웃 및 오류 처리 추가 ★★★
-    script.onerror = function() {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        errorCallback('JSONP 스크립트를 불러오는 데 실패했습니다.');
-    };
-    
-    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-    document.body.appendChild(script);
-
-    // ★★★ 10초 타임아웃 설정 ★★★
-    setTimeout(() => {
-        if (window[callbackName]) {
-            script.onerror(); // 타임아웃 시 오류 콜백 강제 실행
-        }
-    }, 10000); // 10초
-}
-
-// 공통 오류 처리 함수
-function handleSubmissionError(message) {
-    alert('오류가 발생했습니다: ' + message);
-    const submitBtn = document.getElementById('submit-btn');
-    submitBtn.disabled = false;
-    submitBtn.textContent = '제출하고 결과보기';
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeCharts();
@@ -58,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let genres = formData.getAll('genre');
         const otherGenre = formData.get('genre_other').trim();
         if (otherGenre) genres.push(`기타: ${otherGenre}`);
-        record.genres = genres.join(', '); // GET 요청을 위해 텍스트로 미리 변환
+        record.genres = genres;
         
         record.listen_reason = formData.get('listen_reason').trim();
         record.rec_artist = formData.get('rec_artist').trim();
@@ -67,39 +31,45 @@ document.addEventListener('DOMContentLoaded', () => {
         record.rec_song_reason = formData.get('rec_song_reason').trim();
 
         if (!record.frequency || record.genres.length === 0) {
-            handleSubmissionError('1번(청취 빈도)과 2번(선호 장르)은 필수 응답 항목입니다.');
+            alert('1번(청취 빈도)과 2번(선호 장르)은 필수 응답 항목입니다.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '제출하고 결과보기';
             return;
         }
-        
-        let queryString = "action=submit";
-        for (let key in record) {
-            queryString += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(record[key]);
-        }
-        
-        jsonpRequest(SCRIPT_URL + "?" + queryString, (data) => {
-            if (data.result === 'success') {
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(record)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.result === 'success') {
                 form.reset();
                 alert('소중한 의견이 등록되었습니다!');
-                loadInitialData(); // 제출 후 데이터 새로고침
-                submitBtn.disabled = false;
-                submitBtn.textContent = '제출하고 결과보기';
+                loadInitialData();
             } else {
-                handleSubmissionError(data.message || '서버 응답 오류');
+                throw new Error('서버 응답 오류');
             }
-        }, (errorMessage) => {
-            // JSONP 스크립트 로딩 실패 또는 타임아웃 시
-            handleSubmissionError(errorMessage);
+        })
+        .catch(error => {
+            alert('오류가 발생했습니다: ' + error.message);
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '제출하고 결과보기';
         });
     });
 });
 
-// GET(JSONP) 방식으로 데이터 불러오기
 function loadInitialData() {
-    jsonpRequest(SCRIPT_URL, (records) => {
-        updateUI(records);
-    }, (errorMessage) => {
-         document.querySelector('.loading-message').textContent = '데이터를 불러오는 데 실패했습니다.';
-    });
+    fetch(SCRIPT_URL)
+        .then(response => response.json())
+        .then(records => {
+            updateUI(records);
+        })
+        .catch(error => {
+            document.querySelector('.loading-message').textContent = '데이터를 불러오는 데 실패했습니다.';
+        });
 }
 
 function updateUI(records) {
@@ -110,8 +80,6 @@ function updateUI(records) {
     updateCharts(records);
     renderTextRecords(records);
 }
-
-// (이하 initializeCharts, updateCharts, renderTextRecords 함수는 동일하므로 생략)
 
 function initializeCharts() {
     const freqCtx = document.getElementById('frequency-chart').getContext('2d');
@@ -155,6 +123,8 @@ function renderTextRecords(records) {
         let content = '';
         if (record.listen_reason) content += `<p><strong>🎵 노래를 듣는 이유:</strong> ${record.listen_reason}</p>`;
         if (record.rec_artist && record.rec_artist_reason) content += `<p><strong>🎤 아티스트 추천:</strong> ${record.rec_artist} <br> <em>↳ 이유: ${record.rec_artist_reason}</em></p>`;
+        
+        // ★★★ 수정한 부분: 'song_reason' -> 'rec_song_reason'으로 변경 ★★★
         if (record.rec_song && record.rec_song_reason) content += `<p><strong>🎧 노래 추천:</strong> ${record.rec_song} <br> <em>↳ 이유: ${record.rec_song_reason}</em></p>`;
 
         if (content) {
