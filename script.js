@@ -1,5 +1,5 @@
 // ❗️❗️❗️ Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "https://docs.google.com/spreadsheets/d/15qwufwCwD0QcY_2kde7iNHmSGRQoii7WaXkL8eVU9Zw/edit?gid=0#gid=0";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcTaBf0J6qAcCBJREYovpRJLHzWPRhigdxgb6Ml1FscLLVhB4zAtEsmYhzaMPqaWnZ/exec";
 
 let frequencyChart, genreChart;
 
@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // fetch API를 사용해 POST 요청으로 데이터 전송
         fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify(record)
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(data.result === 'success') {
                 form.reset();
                 alert('소중한 의견이 등록되었습니다!');
-                loadInitialData();
+                loadInitialData(); // 제출 후 데이터 새로고침
             } else {
                 throw new Error('서버 응답 오류');
             }
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// fetch API를 사용해 GET 요청으로 데이터 불러오기
 function loadInitialData() {
     fetch(SCRIPT_URL)
         .then(response => response.json())
@@ -123,11 +125,16 @@ function renderTextRecords(records) {
         let content = '';
         if (record.listen_reason) content += `<p><strong>🎵 노래를 듣는 이유:</strong> ${record.listen_reason}</p>`;
         if (record.rec_artist && record.rec_artist_reason) content += `<p><strong>🎤 아티스트 추천:</strong> ${record.rec_artist} <br> <em>↳ 이유: ${record.rec_artist_reason}</em></p>`;
-        
-        // ★★★ 수정한 부분: 'song_reason' -> 'rec_song_reason'으로 변경 ★★★
         if (record.rec_song && record.rec_song_reason) content += `<p><strong>🎧 노래 추천:</strong> ${record.rec_song} <br> <em>↳ 이유: ${record.rec_song_reason}</em></p>`;
 
         if (content) {
+            const recordDiv = document.createElement('div');
+            recordDiv.className = 'record-item';
+            recordDiv.innerHTML = content;
+            container.appendChild(recordDiv);
+        }
+    });
+}
             const recordDiv = document.createElement('div');
             recordDiv.className = 'record-item';
             recordDiv.innerHTML = content;
