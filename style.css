@@ -158,3 +158,33 @@ h2 {
         grid-template-columns: 1fr;
     }
 }
+/* 7. (추가됨) '노래를 듣는 이유' 섹션 스타일 */
+.sub-section {
+    margin-top: 30px;
+}
+
+.sub-section h3 {
+    font-size: 1.3em;
+    color: var(--text-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.records-list-small {
+    /* 스크롤 가능한 박스 */
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgba(240, 240, 240, 0.5); /* 연한 배경 */
+    border-radius: 8px;
+}
+
+.record-item-small {
+    background: var(--card-bg);
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    color: var(--subtle-text);
+}
