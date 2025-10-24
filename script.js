@@ -220,10 +220,8 @@ form.addEventListener('submit', function(event) {
     // 예: const googleSheetURL = "https://script.google.com/macros/s/......";
     // ★★★★★★★★★★★★★★★★★
 
-    if (googleSheetURL === "https://script.google.com/macros/s/AKfycby2oIsq2wHOntv7A8YImHb-MOiU04JTE3cIxOvsOYRbX7qVveUe0XseZj4X8pVXpy9ItA/exec") {
-        alert("script.js 파일에서 googleSheetURL 변수를 설정해야 합니다!");
-        return;
-    }
+  
+    
 
     // 제출 버튼 비활성화 (중복 제출 방지)
     const submitBtn = document.getElementById('submit-btn');
