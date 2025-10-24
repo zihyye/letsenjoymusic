@@ -207,9 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener('submit', function(event) {
         event.preventDefault(); 
 
-        if (googleSheetURL === "https://script.google.com/macros/s/AKfycbwv9FDieLhdT7K-__WHG_hN4P6LPya3mloVIK1FQJN95KBVV_ldZ3gRl8q8yQ_TwZFNTg/exec") {
-            alert("script.js 파일에서 googleSheetURL 변수를 설정해야 합니다!");
-            return;
+      
         }
 
         submitBtn.disabled = true;
