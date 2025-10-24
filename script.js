@@ -207,12 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener('submit', function(event) {
         event.preventDefault(); 
 
-        // ★★★ "변수 설정" 알림창 if문이 삭제된 버전입니다. ★★★
-        if (googleSheetURL === "https://script.google.com/macros/s/AKfycbwv9FDieLhdT7K-__WHG_hN4P6LPya3mloVIK1FQJN95KBVV_ldZ3gRl8q8yQ_TwZFNTg/exec") {
-             // 알림창 대신 콘솔에만 경고
-            console.error("script.js 파일에서 googleSheetURL 변수를 설정해야 합니다!");
-            alert("오류: 페이지가 올바르게 설정되지 않았습니다. 관리자에게 문의하세요.");
-            return;
+       // ★★★ "변수 설정" 알림창 if문이 삭제된 버전입니다. ★★★
+        if (googleSheetURL === "여기에_새로_배포한_웹_앱_URL을_붙여넣으세요") {
+             // 알림창 대신 콘솔에만 경고
+            console.error("script.js 파일에서 googleSheetURL 변수를 설정해야 합니다!");
+            alert("오류: 페이지가 올바르게 설정되지 않았습니다. 관리자에게 문의하세요.");
+            return;
+        
         }
 
         submitBtn.disabled = true;
@@ -257,13 +258,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 4. (★ 새로 추가됨) 페이지 로드 시 데이터 불러오기 ---
     
     function loadDataFromSheet() {
-        console.log("Google Sheet에서 데이터를 불러오는 중...");
-        
-        if (googleSheetURL === "https://script.google.com/macros/s/AKfycbwv9FDieLhdT7K-__WHG_hN4P6LPya3mloVIK1FQJN95KBVV_ldZ3gRl8q8yQ_TwZFNTg/exec") {
-             console.warn("googleSheetURL이 설정되지 않았습니다. 차트를 그릴 수 없습니다.");
-             // 비어있는 차트를 그림
-             updateAllStats();
-             return;
+        // ...
+        if (googleSheetURL === "여기에_새로_배포한_웹_앱_URL을_붙여넣으세요") {
+             console.warn("googleSheetURL이 설정되지 않았습니다. 차트를 그릴 수 없습니다.");
+             // 비어있는 차트를 그림
+             updateAllStats();
+             return;
+        
         }
 
         // '로딩 메시지' 표시
