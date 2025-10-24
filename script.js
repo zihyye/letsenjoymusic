@@ -1,5 +1,5 @@
 // ❗️❗️❗️ Apps Script 웹 앱 URL을 여기에 붙여넣으세요 ❗️❗️❗️
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5CkhCGp2hHitMeVdYkyR1swm97O8Mdgky6vRoDGMjncw4aJJIHEY4t88VQGWCzKJR/exec";
+const SCRIPT_URL = "https://script.google.com/macros/library/d/11OjYvVkx259NoWBXXpubHf9zzpySE6tW9Q5lV2rWbX8wo-wc-8DPNNtf/10";
 
 let frequencyChart, genreChart;
 
