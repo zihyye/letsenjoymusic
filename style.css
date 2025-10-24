@@ -127,10 +127,11 @@ h2 {
     padding-bottom: 10px;
 }
 .chart-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr; /* 1열로 변경 */
+    gap: 30px;
+    margin-top: 20px;
+}
 }
 .records-list .record-item {
     background: rgba(255, 255, 255, 0.6);
