@@ -216,11 +216,11 @@ form.addEventListener('submit', function(event) {
     //      기존에 사용하시던 Google Sheet 링크(URL)를
     //      아래 "YOUR_GOOGLE_SHEET_LINK_HERE" 부분에 정확히 붙여넣으세요.
     //
-    const googleSheetURL = "https://script.google.com/macros/library/d/11OjYvVkx259NoWBXXpubHf9zzpySE6tW9Q5lV2rWbX8wo-wc-8DPNNtf/10";
+    const googleSheetURL = "https://script.google.com/macros/s/AKfycbwontfqYgXCrP4rDb1lX2JCABxxar1XcRCOu5YVY6qwk9jciWRGInpyh1myz-7Rk9c/exec";
     // 예: const googleSheetURL = "https://script.google.com/macros/s/......";
     // ★★★★★★★★★★★★★★★★★
 
-    if (googleSheetURL === "https://script.google.com/macros/library/d/11OjYvVkx259NoWBXXpubHf9zzpySE6tW9Q5lV2rWbX8wo-wc-8DPNNtf/10") {
+    if (googleSheetURL === "https://script.google.com/macros/s/AKfycbwontfqYgXCrP4rDb1lX2JCABxxar1XcRCOu5YVY6qwk9jciWRGInpyh1myz-7Rk9c/exec") {
         alert("script.js 파일에서 googleSheetURL 변수를 설정해야 합니다!");
         return;
     }
