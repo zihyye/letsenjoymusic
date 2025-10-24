@@ -205,32 +205,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- 3. 폼 제출(Submit) 이벤트 처리 ---
+// --- 3. 폼 제출(Submit) 이벤트 처리 ---
 
-    const form = document.getElementById('music-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // 폼의 기본 제출 동작(새로고침) 방지
+const form = document.getElementById('music-form');
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // 폼의 기본 제출 동작(새로고침) 방지
 
-        // 제출 버튼 비활성화 (중복 제출 방지)
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.textContent = "제출 중...";
+    // ★★★★★ 여기!!! ★★★★★
+    //
+    //      기존에 사용하시던 Google Sheet 링크(URL)를
+    //      아래 "YOUR_GOOGLE_SHEET_LINK_HERE" 부분에 정확히 붙여넣으세요.
+    //
+    const googleSheetURL = "https://script.google.com/macros/library/d/11OjYvVkx259NoWBXXpubHf9zzpySE6tW9Q5lV2rWbX8wo-wc-8DPNNtf/10";
+    // 예: const googleSheetURL = "https://script.google.com/macros/s/......";
+    // ★★★★★★★★★★★★★★★★★
 
-        // 1. 폼 데이터 가져오기
-        const formData = new FormData(form);
+    if (googleSheetURL === "https://script.google.com/macros/library/d/11OjYvVkx259NoWBXXpubHf9zzpySE6tW9Q5lV2rWbX8wo-wc-8DPNNtf/10") {
+        alert("script.js 파일에서 googleSheetURL 변수를 설정해야 합니다!");
+        return;
+    }
+
+    // 제출 버튼 비활성화 (중복 제출 방지)
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "제출 중...";
+
+    // 1. 폼 데이터 가져오기
+    const formData = new FormData(form);
+    
+    // 2. (중요) Google Sheet로 데이터 전송 및 저장
+    fetch(googleSheetURL, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            // 서버에서 에러 응답을 보낸 경우 (예: Apps Script 오류)
+            throw new Error('Google Sheet 저장에 실패했습니다.');
+        }
+        return response; // 성공 응답
+    })
+    .then(data => {
+        // --- 저장이 성공했을 때만 아래 코드 실행 ---
         
-        // 2. 데이터 집계
+        console.log("데이터가 Google Sheet에 성공적으로 저장되었습니다.");
+
+        // 3. (클라이언트) 데이터 집계 (차트 즉시 업데이트용)
         
         // (1) 노래 청취 빈도 (Radio)
-        const frequency = formData.get('frequency'); // "4매우자주들음"
+        const frequency = formData.get('frequency');
         if (frequency) {
-            // stats.frequency[frequency] = (stats.frequency[frequency] || 0) + 1;
-            // 예: stats.frequency["4매우자주들음"] = (undefined || 0) + 1  => 1
-            // 예: stats.frequency["4매우자주들음"] = (1 || 0) + 1  => 2
             stats.frequency[frequency] = (stats.frequency[frequency] || 0) + 1;
         }
 
         // (2) 선호 장르 (Checkbox - 복수 선택 처리)
-        const genres = formData.getAll('genre'); // ["발라드", "K-POP"]
+        const genres = formData.getAll('genre');
         genres.forEach(genre => {
             stats.genre[genre] = (stats.genre[genre] || 0) + 1;
         });
@@ -238,8 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // (3) 기타 장르 (Text)
         const otherGenre = formData.get('genre_other').trim();
         if (otherGenre) {
-            // "기타" 항목으로 통일하거나, 입력값 그대로 집계 가능
-            // 여기서는 입력값 그대로 집계 (예: "시티팝")
             stats.genre[otherGenre] = (stats.genre[otherGenre] || 0) + 1;
         }
 
@@ -255,33 +282,36 @@ document.addEventListener("DOMContentLoaded", () => {
         const recSong = formData.get('rec_song').trim();
         const recSongReason = formData.get('rec_song_reason').trim();
         
-        // 아티스트나 노래 둘 중 하나라도 추천한 경우에만 데이터 추가
         if (recArtist || recSong) {
             stats.recommendations.push({
                 artist: recArtist,
                 artistReason: recArtistReason,
                 song: recSong,
                 songReason: recSongReason,
-                // reason: listenReason // (참고) 추천과 이유를 묶을 경우
             });
         }
         
-        // 3. (가상) 데이터 처리 시간 흉내 (0.5초)
-        // 실제로는 이 부분에서 서버(DB)로 데이터를 전송합니다 (예: fetch API 사용)
-        setTimeout(() => {
-            // 4. 차트 및 목록 새로고침
-            updateAllStats();
-            
-            // 5. 폼 초기화 및 버튼 활성화
-            form.reset(); // 폼 입력 내용 지우기
-            submitBtn.disabled = false;
-            submitBtn.textContent = "답변 제출하기";
-            
-            // (알림) 사용자에게 제출 완료 피드백
-            alert('답변이 성공적으로 제출되었습니다!');
+        // 4. 차트 및 목록 새로고침
+        updateAllStats();
+        
+        // 5. 폼 초기화
+        form.reset(); // 폼 입력 내용 지우기
+        alert('답변이 성공적으로 제출되었습니다!');
 
-        }, 500); // 0.5초 지연
+    })
+    .catch(error => {
+        // --- 저장에 실패했을 때 ---
+        console.error("오류 발생:", error);
+        alert('오류가 발생하여 답변을 제출하지 못했습니다. 다시 시도해주세요.');
+        
+    })
+    .finally(() => {
+        // --- 성공하든 실패하든 항상 실행 ---
+        // 버튼을 다시 활성화
+        submitBtn.disabled = false;
+        submitBtn.textContent = "답변 제출하기";
     });
+});
 
     // --- 4. 유틸리티 함수 ---
     
